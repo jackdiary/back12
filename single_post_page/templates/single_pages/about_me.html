@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레츠고 심마니 개발 협업자 모집</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 기본 폰트 설정 및 전체 배경 스타일 */
+        body {
+            font-family: 'Inter', 'Pretendard', sans-serif;
+            transition: background-image 1s ease-in-out;
+        }
+
+        /* 배경 이미지와 딤 처리 (오버레이) */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d121c; /* 기본 배경색 (slate-900 어둡게) */
+            background-size: cover;
+            background-position: center;
+            opacity: 0; /* JS로 로드 후 1로 변경 */
+            transition: opacity 1s ease-in-out;
+            z-index: -1;
+        }
+
+        #background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.45); /* 텍스트 가독성을 위한 딤 처리 */
+        }
+
+        /* 콘텐츠 카드 스타일 */
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 로딩 스피너 애니메이션 (사용하지 않으므로 제거 가능하지만, 코드는 유지) */
+        .spinner {
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <!-- 배경 이미지 컨테이너 (JS가 여기에 이미지를 로드) -->
+    <div id="background-container">
+        <div id="background-overlay"></div>
+    </div>
+
+    <!-- 로딩 인디케이터 (배경 이미지는 여전히 AI로 생성되므로 유지) -->
+    <div id="loading-indicator" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+        <div class="flex flex-col items-center">
+            <div class="spinner w-12 h-12 border-4 border-gray-200 rounded-full"></div>
+            <p class="mt-4 text-white text-lg font-medium">배경 이미지 생성 중... 잠시만 기다려 주세요.</p>
+        </div>
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="relative min-h-screen flex flex-col items-center pt-8 pb-12 px-4">
+
+        <!-- 네비게이션 바 -->
+        <nav class="w-full max-w-4xl flex justify-center space-x-6 mb-12">
+            <a href="/blog" class="text-white hover:text-amber-300 transition duration-300 text-lg font-semibold bg-gray-800 px-4 py-2 rounded-full shadow-lg">Blog</a>
+            <a href="/about_me/" class="text-white hover:text-amber-300 transition duration-300 text-lg font-semibold bg-gray-800 px-4 py-2 rounded-full shadow-lg">About me</a>
+        </nav>
+
+        <!-- 메인 헤더 & 모집 제목 -->
+        <header class="text-center mb-10 w-full max-w-4xl">
+            <h1 class="text-5xl sm:text-6xl font-extrabold text-white leading-tight drop-shadow-lg [text-shadow:0_3px_5px_rgba(0,0,0,0.4)]">
+                레츠고 심마니 개발 협업자 모집
+            </h1>
+            <p class="text-xl text-amber-300 font-medium mt-2 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
+                전통 채집의 재미를 디지털로! 함께 새로운 도전을 시작할 분을 찾습니다.
+            </p>
+        </header>
+
+
+        <img id="logo-image"
+             src="{% static 'single_pages/다운로드.png' %}"
+             alt="레츠고 심마니 로고"
+             class="w-24 h-24 sm:w-32 sm:h-32 mb-8 rounded-full shadow-2xl transition duration-500 transform hover:scale-105"
+             style="border: 5px solid #d97706;"> <!-- display:none 제거 -->
+
+        <!-- 콘텐츠 카드 컨테이너 -->
+        <main class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-8 z-10">
+
+            <!-- 1. 프로젝트 개요 카드 -->
+            <section class="card p-6 sm:p-8 rounded-xl">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-amber-600 mr-3">|</span> 레츠고 심마니 주요 기능
+                </h2>
+                <p class="text-gray-600 mb-6">
+                    약초 및 버섯 채집 경험을 게임화하여 사용자에게 복용/보관 정보, 효능, 시장 가격 등의 실용적인 정보를 제공하는 모바일 도감 & 커뮤니티 플랫폼입니다.
+                </p>
+
+                <h3 class="text-xl font-semibold text-gray-700 mb-3"># 도감 기능: 채집 정보 제공</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4">
+                    <li>복용 방법: 안전하고 올바른 섭취 가이드</li>
+                    <li>보관 방법: 약재별 최적의 보존 조건 및 기간</li>
+                    <li>핵심 효능: 전통 및 현대 연구 기반의 건강 효과</li>
+                    <li>시중 판매가: (킬로그램/개/그램당) 실시간 시장 가격 정보 연동</li>
+                </ul>
+            </section>
+
+            <!-- 2. 심마니 등급 시스템 카드 -->
+            <section class="card p-6 sm:p-8 rounded-xl">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-amber-600 mr-3">|</span> 개인 프로필 및 등급 시스템
+                </h2>
+                <p class="text-gray-600 mb-6">
+                    사용자의 누적 채집량, 도감 완성도에 따라 등급을 부여하여 성취감을 높입니다.
+                </p>
+
+                <h3 class="text-xl font-semibold text-gray-700 mb-3"># 심마니 랭킹 (총 10단계)</h3>
+                <ol class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-600">
+                    <li class="font-medium">1. 걸음마 등급</li>
+                    <li class="font-medium">2. 초보 심마니</li>
+                    <li class="font-medium">3. 견습 심마니</li>
+                    <li class="font-medium">4. 중급 심마니</li>
+                    <li class="font-medium">5. 고급 심마니</li>
+                    <li class="font-medium">6. 고수 심마니</li>
+                    <li class="font-medium">7. 심마니의 왕</li>
+                    <li class="font-medium">8. 심마니의 지존</li>
+                    <li class="font-medium">9. 심마니의 황제</li>
+                    <li class="font-medium text-red-600 font-bold">10. 심마니의 신</li>
+                </ol>
+            </section>
+
+            <!-- 3. 개발자 이력 및 비전 카드 -->
+            <section class="card lg:col-span-2 p-6 sm:p-8 rounded-xl">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-amber-600 mr-3">|</span> 개발자 비전 및 이력
+                </h2>
+                <div class="space-y-4 text-gray-700">
+                    <p class="font-semibold text-lg">
+                        안녕하세요, 개발자 잭입니다. 새로운 혁신을 위해 협업할 팀원을 모집합니다.
+                    </p>
+                    <h3 class="text-xl font-semibold text-gray-800 mt-6"># 이전 프로젝트: 킥라니 안전 시스템 (개념 기획)</h3>
+                    <p class="border-l-4 border-indigo-500 pl-4 py-2 bg-indigo-50 text-base">
+                        **[전동 킥보드 안전 및 사고 예방 솔루션]**
+                        킥보드 핸들 중앙에 저화질 흑백 카메라를 설치하여 안전모 미착용 시 작동을 불가능하게 오토 컨트롤하는 이미지 인식 프로그램 기획. 사고 방어 단계 추가를 목표로 합니다.
+                    </p>
+                    <h3 class="text-xl font-semibold text-gray-800 mt-6"># 협업 문의</h3>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <a href="mailto:9radaaa@gmail.com" class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition duration-300 font-medium">
+                            이메일 문의: 9radaaa@gmail.com
+                        </a>
+                        <a href="tel:010-4055-9008" class="bg-gray-700 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300 font-medium">
+                            연락처: 010-4055-9008
+                        </a>
+                        <a href="https://instagram.com/ohsh2" target="_blank" class="bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition duration-300 font-medium">
+                            Instagram: @ohsh2
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const apiKey = ""; // API key is automatically provided by the environment
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const backgroundContainer = document.getElementById('background-container');
+
+        // 로고 이미지 로직은 HTML 태그 자체에서 처리되므로 제거했습니다.
+
+        // --- 1. Base64 To URL Utility (더 이상 로고에는 사용되지 않음) ---
+        function base64ToImageUrl(base64Data, mimeType = 'image/png') {
+            return `data:${mimeType};base64,${base64Data}`;
+        }
+
+        // --- 2. Image Generation Logic (배경 이미지 생성용으로만 유지) ---
+
+        // Function to make API call with exponential backoff
+        async function fetchWithBackoff(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response;
+                    } else if (response.status === 429 && i < maxRetries - 1) {
+                        // Too Many Requests, retry with delay
+                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        console.warn(`[API] Rate limit hit. Retrying in ${Math.round(delay / 1000)}s...`);
+                    } else {
+                        throw new Error(`API error: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw error;
+                    }
+                }
+            }
+        }
+
+        async function generateImage(prompt, model = 'imagen-3.0-generate-002') {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${apiKey}`;
+
+            const payload = {
+                instances: { prompt: prompt },
+                parameters: { "sampleCount": 1, "aspectRatio": "16:9" } // 배경이므로 16:9 고정
+            };
+
+
+            const response = await fetchWithBackoff(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                return base64ToImageUrl(result.predictions[0].bytesBase64Encoded);
+            } else {
+                console.error("Image generation failed:", result);
+                throw new Error("Failed to get image data from API response.");
+            }
+        }
+
+
+        // --- 3. Main Initialization Function ---
+        async function initializePage() {
+            loadingIndicator.style.display = 'flex';
+
+            // 로고 생성 프롬프트 제거. 이제 로컬 이미지를 사용합니다.
+            const backgroundPrompt = "A serene, high-resolution photo of a dense, misty Korean mountain forest at dawn, with filtered sunlight shining through the trees. The atmosphere should be mystical and perfect for a Simmani (herb gatherer) theme. Focus on deep greens and earth tones. cinematic, wide angle.";
+
+            try {
+                // 배경 이미지만 생성
+                const backgroundUrl = await generateImage(backgroundPrompt);
+
+                // Apply Background Image
+                backgroundContainer.style.backgroundImage = `url('${backgroundUrl}')`;
+                backgroundContainer.style.opacity = '1';
+
+                // 로고 이미지는 이미 HTML에 경로가 지정되어 있으므로, 별도의 설정 없이 표시됩니다.
+
+            } catch (error) {
+                console.error("Error setting up images. Using fallback colors.", error);
+                // Fallback for background if image generation fails
+                backgroundContainer.style.backgroundImage = 'none';
+                backgroundContainer.style.backgroundColor = '#1e3a8a'; /* Blue Fallback */
+                backgroundContainer.style.opacity = '1';
+
+                // 로고 이미지는 그대로 표시하거나 오류 처리가 필요할 수 있습니다.
+            } finally {
+                // 배경 이미지가 로드되었거나 오류가 발생했으면 로딩 인디케이터 숨기기
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        window.onload = initializePage;
+    </script>
+
+</body>
+</html>
