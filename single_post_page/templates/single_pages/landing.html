@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Django | 프로필 홈</title>
+    <title>Jack's DevLog | 홈</title>
     <!-- Tailwind CSS CDN을 로드하여 간결하고 고급스러운 디자인을 적용합니다. -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Kit -->
+    <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
     <style>
         /* 기본 폰트 설정 및 배경색 설정 */
         body {
@@ -24,12 +26,38 @@
     </style>
 </head>
 <body class="antialiased">
+    <!-- 네비게이션 바 (base.html과 동일한 구조) -->
+    <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition">Jack's DevLog</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/blog/" class="text-gray-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Blog</a>
+                        <a href="/about_me/" class="text-gray-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About Me</a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">Log In</a>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button type="button" class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- 메인 컨테이너: 화면 중앙에 위치시키고 최소 높이를 전체 화면으로 설정 -->
     <div class="min-h-screen flex items-center justify-center p-4 sm:p-8">
 
         <!-- 프로필 카드: 최대 너비를 설정하고, 둥근 모서리, 그림자, 흰색 배경을 적용하여 고급스러운 느낌을 부여 -->
-        <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 sm:p-10 transition-all duration-300">
+        <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 sm:p-10 transition-all duration-300 mt-16">
 
             <!-- 제목 및 인사말 -->
             <h1 class="text-4xl font-extrabold text-slate-900 mb-2 text-center">
@@ -46,17 +74,21 @@
                     아래는 임시 플레이스홀더 이미지입니다.
                     실제 사용 시에는 웹에 업로드된 이미지의 공개 URL로 변경해주세요.
                 -->
-                <img
-                    class="w-32 h-32 rounded-full mx-auto object-cover ring-4 ring-indigo-500 ring-offset-4 ring-offset-white shadow-lg"
-                    src="{% static 'single_pages/20220903_160035.jpg' %}"
-                    alt="블로그 주인 프로필 사진"
-                    onerror="this.onerror=null; this.src='https://placehold.co/128x128/94a3b8/ffffff?text=Image+Error';"
-                >
+                {% if profile.profile_image %}
+                    <img
+                        class="w-32 h-32 rounded-full mx-auto object-cover ring-4 ring-indigo-500 ring-offset-4 ring-offset-white shadow-lg"
+                        src="{{ profile.profile_image.url }}"
+                        alt="{{ profile.name }} 프로필 사진"
+                    >
+                {% else %}
+                     <img class="w-32 h-32 rounded-full mx-auto object-cover ring-4 ring-indigo-500 ring-offset-4 ring-offset-white shadow-lg"
+                          src="https://placehold.co/128x128/e0e7ff/4f46e5?text=Jack" alt="기본 프로필 사진">
+                {% endif %}
                 <h2 class="text-3xl font-bold text-slate-800 mt-4">
-                    블로그 주인 (9radaaa)
+                    {{ profile.name | default:"블로그 주인 (9radaaa)" }}
                 </h2>
                 <p class="text-base text-indigo-600 font-medium">
-                    개발과 일상을 기록합니다.
+                    {{ profile.bio | default:"개발과 일상을 기록합니다." }}
                 </p>
             </div>
 
